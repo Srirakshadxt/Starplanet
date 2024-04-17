@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Room
 import com.jpmc.sriraksha.starplanet.data.local.PlanetDatabase
 import com.jpmc.sriraksha.starplanet.data.local.PlanetLocalDataSource
+import com.jpmc.sriraksha.starplanet.data.local.PlanetLocalDataSourceImpl
 import com.jpmc.sriraksha.starplanet.data.remote.PlanetApi
 import com.jpmc.sriraksha.starplanet.data.remote.PlanetRemoteDataSource
+import com.jpmc.sriraksha.starplanet.data.remote.PlanetRemoteDataSourceImpl
 import com.jpmc.sriraksha.starplanet.data.repository.PlanetRepository
+import com.jpmc.sriraksha.starplanet.data.repository.PlanetRepositoryImpl
 import com.jpmc.sriraksha.starplanet.ui.viewmodel.PlanetsViewModel
 import dagger.Module
 import dagger.Provides
@@ -33,7 +36,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providePlanetLocalDataSource(database: PlanetDatabase): PlanetLocalDataSource {
-        return PlanetLocalDataSource(database.planetDao())
+        return PlanetLocalDataSourceImpl(database.planetDao())
     }
 
     @Provides
@@ -47,18 +50,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePlanetRemoteDataSource(planetApi: PlanetApi): PlanetRemoteDataSource {
-        return PlanetRemoteDataSource(planetApi)
-    }
+    fun providePlanetRemoteDataSource(planetRemoteDataSourceImpl: PlanetRemoteDataSourceImpl): PlanetRemoteDataSource =
+        planetRemoteDataSourceImpl
 
     @Provides
     @Singleton
     fun providePlanetRepository(
-        remoteDataSource: PlanetRemoteDataSource,
-        localDataSource: PlanetLocalDataSource
-    ): PlanetRepository {
-        return PlanetRepository(remoteDataSource, localDataSource)
-    }
+        planetRepositoryImpl: PlanetRepositoryImpl
+    ): PlanetRepository = planetRepositoryImpl
 
     @Provides
     @Singleton

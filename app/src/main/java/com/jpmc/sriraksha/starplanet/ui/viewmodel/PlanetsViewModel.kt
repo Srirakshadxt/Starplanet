@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jpmc.sriraksha.starplanet.data.model.Planet
 import com.jpmc.sriraksha.starplanet.data.repository.PlanetRepository
-import com.jpmc.sriraksha.starplanet.data.repository.PlanetRepository.Companion.toPlanet
+import com.jpmc.sriraksha.starplanet.data.repository.PlanetRepositoryImpl.Companion.toPlanet
 import com.jpmc.sriraksha.starplanet.ui.PlanetsUiState
 import com.jpmc.sriraksha.starplanet.utils.NoMorePagesException
 import com.jpmc.sriraksha.starplanet.utils.NoNetworkException
@@ -29,7 +29,7 @@ class PlanetsViewModel @Inject constructor(
     private val _isLoadingMore = MutableStateFlow(false)
     val isLoadingMore: StateFlow<Boolean> = _isLoadingMore.asStateFlow()
 
-    private var nextPageUrl: String? = null
+    var nextPageUrl: String? = null
 
     init {
         fetchPlanets()
@@ -79,22 +79,14 @@ class PlanetsViewModel @Inject constructor(
     }
 
     private fun handleError(error: Throwable) {
-        when (error) {
-            is NoNetworkException -> {
-                _uiState.value = PlanetsUiState.Error("No network connection available")
-            }
+        _uiState.value = when (error) {
+            is NoNetworkException -> PlanetsUiState.Error(
+                error.message ?: "No network connection available"
+            )
 
-            is NoMorePagesException -> {
-                _uiState.value = PlanetsUiState.Error("No more pages available")
-            }
-
-            is RemoteDataSourceException -> {
-                _uiState.value = PlanetsUiState.Error(error.message ?: "Unknown error")
-            }
-
-            else -> {
-                _uiState.value = PlanetsUiState.Error("Unknown error")
-            }
+            is NoMorePagesException -> PlanetsUiState.Error("No more pages available")
+            is RemoteDataSourceException -> PlanetsUiState.Error(error.message ?: "Unknown error")
+            else -> PlanetsUiState.Error("Unknown error")
         }
     }
 }
