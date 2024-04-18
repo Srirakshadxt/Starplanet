@@ -15,8 +15,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "com.jpmc.sriraksha.starplanet.ui.screens.HiltTestRunner"
-        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.jpmc.sriraksha.starplanet.di.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -79,10 +78,9 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.coil.kt.compose)
-//    testImplementation(libs.junit)
-    testImplementation(libs.mockito.kotlin)
     implementation(libs.coroutines.test)
     implementation(libs.coroutines.test.core)
+    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.arch.core.test)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
@@ -91,7 +89,6 @@ dependencies {
     androidTestImplementation(libs.mock.mock)
     androidTestImplementation(libs.mockito.kotlin)
     androidTestImplementation(libs.mock.android)
-    //androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
