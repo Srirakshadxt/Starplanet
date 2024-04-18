@@ -22,10 +22,12 @@ class PlanetDaoTest {
     @Mock
     private lateinit var planetDao: PlanetDao
 
-
+    /**
+     * Scenario: Insert planets into the database and verify they are saved correctly.
+     * Covers the positive case of inserting and retrieving planets from the database.
+     */
     @Test
     fun `insert planets should save to database`() = runBlocking {
-        // Arrange
         val planets = listOf(
             Planet(
                 name = "Earth",
@@ -55,10 +57,10 @@ class PlanetDaoTest {
             )
         )
 
-        // Act
+
         planetDao.insertPlanets(planets)
         `when`(planetDao.getAllPlanets()).thenReturn(planets)
-        // Assert
+
         val allPlanets = planetDao.getAllPlanets()
 
         assertEquals(2, allPlanets.size)
@@ -66,29 +68,30 @@ class PlanetDaoTest {
         assertEquals("Mars", allPlanets[1].name)
     }
 
-
+    /**
+     * Scenario: Retrieve all planets from an empty database.
+     * Covers the edge case of querying an empty database and verifying an empty list is returned.
+     */
     @Test
     fun `get all planets should return an empty list when the database is empty`() =
         runBlocking {
-            // Arrange
             `when`(planetDao.getAllPlanets()).thenReturn(emptyList())
 
-            // Act
             val allPlanets = planetDao.getAllPlanets()
 
-            // Assert
             assertTrue(allPlanets.isEmpty())
         }
 
+    /**
+     * Scenario: Get the count of planets in an empty database.
+     * Covers the edge case of counting planets in an empty database and verifying the count is 0.
+     */
     @Test
     fun `get planets count should return 0 when the database is empty`() = runBlocking {
-        // Arrange
         `when`(planetDao.getPlanetsCount()).thenReturn(0L)
 
-        // Act
         val planetsCount = planetDao.getPlanetsCount()
 
-        // Assert
         assertEquals(0L, planetsCount)
     }
 }

@@ -16,6 +16,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * View model for the Planets screen that manages the UI state, selected planet, and loading state.
+ * It fetches planets from the repository, handles loading more planets, and updates the UI accordingly.
+ */
 @HiltViewModel
 class PlanetsViewModel @Inject constructor(
     private val planetRepository: PlanetRepository

@@ -31,9 +31,12 @@ class PlanetLocalDataSourceTest {
         planetLocalDataSource = PlanetLocalDataSourceImpl(planetDao)
     }
 
+    /**
+     * Scenario: Save planets to the local data source and verify they are inserted into the local database.
+     * Covers the positive case of saving planets to the local data source and verifying the insertion.
+     */
     @Test
     fun `save planets should insert the planets into the local database`() = runBlocking {
-        // Arrange
         val planets = listOf(
             Planet(
                 name = "Earth",
@@ -63,34 +66,34 @@ class PlanetLocalDataSourceTest {
             )
         )
 
-        // Act
         planetLocalDataSource.savePlanets(planets)
 
-        // Assert
         verify(planetDao).insertPlanets(planets)
     }
 
+    /**
+     * Scenario: Get planets from the local data source when the local database is empty.
+     * Covers the edge case of retrieving planets from an empty local database and verifying an empty list is returned.
+     */
     @Test
     fun `get planets should return an empty list when the local database is empty`() = runBlocking {
-        // Arrange
         `when`(planetDao.getAllPlanets()).thenReturn(emptyList())
 
-        // Act
         val allPlanets = planetLocalDataSource.getPlanets()
 
-        // Assert
         assertTrue(allPlanets.isEmpty())
     }
 
+    /**
+     * Scenario: Get the count of planets from the local data source when the local database is empty.
+     * Covers the edge case of retrieving the count of planets from an empty local database and verifying the count is 0.
+     */
     @Test
     fun `get planets count should return 0 when the local database is empty`() = runBlocking {
-        // Arrange
         `when`(planetDao.getPlanetsCount()).thenReturn(0L)
 
-        // Act
         val planetsCount = planetLocalDataSource.getPlanetsCount()
 
-        // Assert
         assertEquals(0L, planetsCount)
     }
 }

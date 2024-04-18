@@ -9,6 +9,9 @@ import com.jpmc.sriraksha.starplanet.utils.NoNetworkException
 import com.jpmc.sriraksha.starplanet.utils.RemoteDataSourceException
 import javax.inject.Inject
 
+/**
+ * Implements the PlanetRepository interface to provide planet data from planet api and local data sources (DB).
+ */
 class PlanetRepositoryImpl @Inject constructor(
     private val remoteDataSource: PlanetRemoteDataSource,
     private val localDataSource: PlanetLocalDataSource

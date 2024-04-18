@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jpmc.sriraksha.starplanet.data.model.Planet
 
-
+/**
+ * Displays the details of a planet with a back button to navigate back to the previous screen.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanetDetailsScreen(

@@ -36,6 +36,10 @@ class PlanetRepositoryImplTest {
         planetRepository = PlanetRepositoryImpl(planetRemoteDataSource, planetLocalDataSource)
     }
 
+    /**
+     * Scenario: Get planets from the repository when the remote data source returns a valid response.
+     * Covers the positive case of retrieving planets and verifying the correct PlanetResponse is returned.
+     */
     @Test
     fun `get planets should return the correct PlanetResponse`() = runTest {
         // Arrange
@@ -53,6 +57,10 @@ class PlanetRepositoryImplTest {
         // verify(planetLocalDataSource).savePlanets(any())
     }
 
+    /**
+     * Scenario: Get planets from the repository when the remote data source fails with NoNetworkException.
+     * Covers the edge case of retrieving cached planets from the local data source when the remote fails.
+     */
     @Test
     fun `get planets should return cached response when remote fails with NoNetworkException`() =
         runTest {
@@ -78,6 +86,10 @@ class PlanetRepositoryImplTest {
             verify(planetLocalDataSource).getPlanetsCount()
         }
 
+    /**
+     * Scenario: Get planets from the repository when both remote and local data sources fail.
+     * Covers the negative case of handling failures from both remote and local data sources.
+     */
     @Test
     fun `get planets should return failure when remote and local fail`() = runTest {
         // Arrange
@@ -94,6 +106,10 @@ class PlanetRepositoryImplTest {
         verify(planetRemoteDataSource).getPlanets()
     }
 
+    /**
+     * Scenario: Get the next page of planets from the repository when the remote data source returns a valid response.
+     * Covers the positive case of retrieving the next page of planets and verifying the correct PlanetResponse is returned.
+     */
     @Test
     fun `get next page should return the correct PlanetResponse`() = runTest {
         // Arrange
@@ -111,6 +127,10 @@ class PlanetRepositoryImplTest {
         verify(planetRemoteDataSource).getNextPage(nextPageUrl)
     }
 
+    /**
+     * Scenario: Get the next page of planets from the repository when the remote data source fails with NoNetworkException.
+     * Covers the negative case of handling NoNetworkException when retrieving the next page of planets.
+     */
     @Test
     fun `get next page should return failure when remote fails with NoNetworkException`() =
         runTest {
@@ -128,6 +148,10 @@ class PlanetRepositoryImplTest {
             verify(planetRemoteDataSource).getNextPage(nextPageUrl)
         }
 
+    /**
+     * Scenario: Get the next page of planets from the repository when the remote data source fails with RemoteDataSourceException.
+     * Covers the negative case of handling RemoteDataSourceException when retrieving the next page of planets.
+     */
     @Test
     fun `get next page should return failure when remote fails with RemoteDataSourceException`() =
         runTest {

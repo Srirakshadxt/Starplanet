@@ -20,6 +20,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+/**
+ * Provides dependency injection for the Star Planet app using Hilt.
+ * Provides dependencies for API, local data source, remote data source, repository, and view model.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -39,6 +43,10 @@ object AppModule {
         return PlanetLocalDataSourceImpl(database.planetDao())
     }
 
+    /**
+     * Provides the PlanetDatabase instance using Room.
+     * The database is built with the given application context and named "planet-database".
+     */
     @Provides
     @Singleton
     fun providePlanetDatabase(@ApplicationContext context: Context): PlanetDatabase {

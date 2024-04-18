@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+/**
+ * Displays an error message with a retry button.
+ */
 @Composable
 fun ErrorMessage(
     message: String,

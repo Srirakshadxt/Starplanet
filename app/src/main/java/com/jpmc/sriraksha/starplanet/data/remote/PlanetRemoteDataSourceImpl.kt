@@ -6,6 +6,9 @@ import com.jpmc.sriraksha.starplanet.utils.RemoteDataSourceException
 import java.io.IOException
 import javax.inject.Inject
 
+/**
+ * Implements the PlanetRemoteDataSource interface to retrieve planet data from the PlanetApi.
+ */
 class PlanetRemoteDataSourceImpl @Inject constructor(
     private val planetApi: PlanetApi
 ) : PlanetRemoteDataSource {

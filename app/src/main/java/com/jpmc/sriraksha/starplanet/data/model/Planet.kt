@@ -3,6 +3,9 @@ package com.jpmc.sriraksha.starplanet.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Data class that represents a planet entity with various attributes such as name, rotation period, orbital period, diameter, climate, gravity, terrain, surface water, population, created, and edited.
+ */
 @Entity(tableName = "planets")
 data class Planet(
     @PrimaryKey(autoGenerate = true)

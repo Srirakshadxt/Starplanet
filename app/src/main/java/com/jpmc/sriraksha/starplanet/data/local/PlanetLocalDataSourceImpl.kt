@@ -5,6 +5,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ * Concrete implementation of the PlanetLocalDataSource interface that uses a PlanetDao to perform CRUD operations on Planet entities.
+ */
 class PlanetLocalDataSourceImpl @Inject constructor(
     private val planetDao: PlanetDao
 ) : PlanetLocalDataSource {

@@ -30,6 +30,10 @@ class PlanetRemoteDataSourceTest {
         planetRemoteDataSource = PlanetRemoteDataSourceImpl(planetApi)
     }
 
+    /**
+     * Scenario: Get planets from the remote data source when the API returns a valid response.
+     * Covers the positive case of retrieving planets and verifying the correct PlanetResponse is returned.
+     */
     @Test
     fun `get planets should return the correct PlanetResponse`() = runBlocking {
         // Arrange
@@ -82,6 +86,10 @@ class PlanetRemoteDataSourceTest {
         assertEquals(planetResponse, result)
     }
 
+    /**
+     * Scenario: Get planets from the remote data source when the API returns an empty list.
+     * Covers the edge case of retrieving planets when no data is available and verifying an empty PlanetResponse is returned.
+     */
     @Test
     fun `get planets should return an empty PlanetResponse when the API returns an empty list`() =
         runBlocking {
@@ -102,6 +110,10 @@ class PlanetRemoteDataSourceTest {
             assertEquals(emptyPlanetResponse, result)
         }
 
+    /**
+     * Scenario: Get the next page of planets from the remote data source when the API returns a valid response.
+     * Covers the positive case of retrieving the next page of planets and verifying the correct PlanetResponse is returned.
+     */
     @Test
     fun `get next page should return the correct PlanetResponse`() = runBlocking {
         // Arrange
@@ -155,6 +167,10 @@ class PlanetRemoteDataSourceTest {
         assertEquals(planetResponse, result)
     }
 
+    /**
+     * Scenario: Get the next page of planets from the remote data source when the API returns an empty list.
+     * Covers the edge case of retrieving the next page of planets when no data is available and verifying an empty PlanetResponse is returned.
+     */
     @Test
     fun `get next page should return an empty PlanetResponse when the API returns an empty list`() =
         runBlocking {
@@ -176,6 +192,10 @@ class PlanetRemoteDataSourceTest {
             assertEquals(emptyPlanetResponse, result)
         }
 
+    /**
+     * Scenario: Get the next page of planets from the remote data source when an IOException occurs.
+     * Covers the negative case of handling an IOException and verifying that a NoNetworkException is thrown with the correct message.
+     */
     @Test
     fun `get next page should throw NoNetworkException on IOException`() = runBlocking {
         // Arrange
@@ -193,6 +213,10 @@ class PlanetRemoteDataSourceTest {
         assertEquals("No network connection available", exception.message)
     }
 
+    /**
+     * Scenario: Get planets from the remote data source when an unknown exception occurs.
+     * Covers the negative case of handling an unknown exception and verifying that a RemoteDataSourceException is thrown with the correct message.
+     */
     @Test
     fun `get planets should throw RemoteDataSourceException on other exceptions`() = runBlocking {
         // Arrange
@@ -207,6 +231,10 @@ class PlanetRemoteDataSourceTest {
 
     }
 
+    /**
+     * Scenario: Get the next page of planets from the remote data source when an unknown exception occurs.
+     * Covers the negative case of handling an unknown exception and verifying that a RemoteDataSourceException is thrown with the correct message.
+     */
     @Test
     fun `get next page should throw RemoteDataSourceException on other exceptions`() = runBlocking {
         // Arrange
