@@ -15,8 +15,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.jpmc.sriraksha.starplanet.ui.screens.HiltTestRunner"
+        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -47,8 +47,17 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/*"
         }
     }
+    testOptions {
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
+    }
+
 }
 
 dependencies {
@@ -70,11 +79,24 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.coil.kt.compose)
-    testImplementation(libs.junit)
+//    testImplementation(libs.junit)
+    testImplementation(libs.mockito.kotlin)
+    implementation(libs.coroutines.test)
+    implementation(libs.coroutines.test.core)
+    testImplementation(libs.arch.core.test)
     testImplementation(libs.mockito.core)
-    androidTestImplementation(libs.androidx.test.ext.junit)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.hilt.android.test)
+    kaptTest(libs.hilt.compiler)
+    androidTestImplementation(libs.mock.mock)
+    androidTestImplementation(libs.mockito.kotlin)
+    androidTestImplementation(libs.mock.android)
+    //androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.hilt.android.test)
+    kaptAndroidTest(libs.hilt.compiler)
+    kaptAndroidTest(libs.hilt.android.compiler)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
