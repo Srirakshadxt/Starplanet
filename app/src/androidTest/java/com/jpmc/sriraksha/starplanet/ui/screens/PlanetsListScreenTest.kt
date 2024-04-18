@@ -1,6 +1,7 @@
 package com.jpmc.sriraksha.starplanet.ui.screens
 
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isDisplayed
@@ -11,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jpmc.sriraksha.starplanet.MainActivity
 import com.jpmc.sriraksha.starplanet.data.model.Planet
 import com.jpmc.sriraksha.starplanet.ui.PlanetsUiState
+import com.jpmc.sriraksha.starplanet.ui.loadmore.strategy.LoadMoreStrategy
 import com.jpmc.sriraksha.starplanet.ui.viewmodel.PlanetsViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -78,7 +80,7 @@ class PlanetsListScreenTest {
         every { viewModel.loadMorePlanets() }
 
         composeTestRule.activity.setContent {
-            PlanetsListScreen(viewModel)
+            PlanetsListScreen(viewModel, loadMoreStrategy = TestLoadMoreStrategy())
         }
 
         composeTestRule.waitUntil(10_000L) {
@@ -137,7 +139,7 @@ class PlanetsListScreenTest {
         every { viewModel.loadMorePlanets() }
 
         composeTestRule.activity.setContent {
-            PlanetsListScreen(viewModel)
+            PlanetsListScreen(viewModel, loadMoreStrategy = TestLoadMoreStrategy())
         }
 
         composeTestRule.waitUntil(10_000L) {
@@ -202,7 +204,7 @@ class PlanetsListScreenTest {
         }
 
         composeTestRule.activity.setContent {
-            PlanetsListScreen(viewModel)
+            PlanetsListScreen(viewModel, loadMoreStrategy = TestLoadMoreStrategy())
         }
 
         composeTestRule.waitUntil(5_000L) {
@@ -292,6 +294,13 @@ class PlanetsListScreenTest {
 
         composeTestRule.onNodeWithText("Retry").performClick()
         coVerify { viewModel.fetchPlanets() }
+    }
+}
+
+class TestLoadMoreStrategy : LoadMoreStrategy {
+    override fun shouldLoadMore(layoutInfo: LazyListLayoutInfo): Boolean {
+        // Custom logic for testing
+        return false
     }
 }
 

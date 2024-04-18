@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
@@ -24,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -32,12 +32,19 @@ import com.jpmc.sriraksha.starplanet.data.model.Planet
 import com.jpmc.sriraksha.starplanet.ui.PlanetsUiState
 import com.jpmc.sriraksha.starplanet.ui.components.ErrorMessage
 import com.jpmc.sriraksha.starplanet.ui.components.LoadingIndicator
+import com.jpmc.sriraksha.starplanet.ui.loadmore.strategy.DefaultLoadMoreStrategy
+import com.jpmc.sriraksha.starplanet.ui.loadmore.strategy.LoadMoreStrategy
 import com.jpmc.sriraksha.starplanet.ui.viewmodel.PlanetsViewModel
+import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * Displays a list of Star Wars planets with a top app bar and a loading indicator, error message, or planet details screen when applicable.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanetsListScreen(
-    viewModel: PlanetsViewModel = hiltViewModel()
+    viewModel: PlanetsViewModel = hiltViewModel(),
+    loadMoreStrategy: LoadMoreStrategy = DefaultLoadMoreStrategy()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val isLoadingMore by viewModel.isLoadingMore.collectAsState()
@@ -61,7 +68,8 @@ fun PlanetsListScreen(
                     planets = (uiState as PlanetsUiState.Success).planets,
                     onPlanetSelected = viewModel::onPlanetSelected,
                     onLoadMore = viewModel::loadMorePlanets,
-                    isLoadingMore = isLoadingMore
+                    isLoadingMore = isLoadingMore,
+                    loadMoreStrategy
                 )
 
                 is PlanetsUiState.Error -> ErrorMessage(
@@ -76,13 +84,19 @@ fun PlanetsListScreen(
     }
 }
 
+/**
+ * Displays a lazy column of planet items with loading more functionality.
+ */
 @Composable
 fun PlanetsList(
     planets: List<Planet>,
     onPlanetSelected: (Planet) -> Unit,
     onLoadMore: () -> Unit,
-    isLoadingMore: Boolean
+    isLoadingMore: Boolean,
+    loadMoreStrategy: LoadMoreStrategy = DefaultLoadMoreStrategy()
 ) {
+
+    // Remembers the lazy list state to track the scroll position and load more items when needed
     val listState = rememberLazyListState()
 
     LazyColumn(state = listState) {
@@ -107,14 +121,28 @@ fun PlanetsList(
         }
     }
 
-    val shouldLoadMore = listState.shouldLoadMore()
-    LaunchedEffect(shouldLoadMore) {
-        if (shouldLoadMore) {
-            onLoadMore()
-        }
+//    val shouldLoadMore by derivedStateOf {
+//        loadMoreStrategy.shouldLoadMore(listState.layoutInfo)
+//    }
+//    LaunchedEffect(shouldLoadMore) {
+//        if (shouldLoadMore) {
+//            onLoadMore()
+//        }
+//    }
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo }
+            .collectLatest { layoutInfo ->
+                val shouldLoadMore = loadMoreStrategy.shouldLoadMore(layoutInfo)
+                if (shouldLoadMore) {
+                    onLoadMore()
+                }
+            }
     }
 }
 
+/**
+ * Displays a clickable card with a planet's name
+ */
 @Composable
 fun PlanetItem(
     planet: Planet,
@@ -148,11 +176,4 @@ fun PlanetItem(
             )
         }
     }
-}
-
-fun LazyListState.shouldLoadMore(): Boolean {
-    val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
-    val totalItemCount = layoutInfo.totalItemsCount
-
-    return lastVisibleItem != null && lastVisibleItem.index >= totalItemCount - 5
 }
