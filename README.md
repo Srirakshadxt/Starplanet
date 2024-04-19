@@ -37,15 +37,17 @@ seamless user experience.
   responsive network operations.
 - Flows: The Kotlin Flow library is used for reactive programming, allowing seamless management of
   data streams and updates.
-- Hilt: Hilt, a dependency injection library, is used to manage dependencies and promote a modular
+- Hilt: The dependency injection library, is used to manage dependencies and promote a modular
   and testable codebase.
 - Jetpack Compose: The app's UI is built using Jetpack Compose, a modern and declarative UI toolkit
   for building native Android UI.
 - Unit Testing: The app includes comprehensive unit tests to verify the correctness of business and
   presentation
   logic and ensure code reliability.
-- Instrumentation Testing: Instrumentation tests are implemented using Mockito and Compose Testing
+- Instrumentation Testing: Implemented using Mockito and Compose Testing
   to validate the app's UI components and user interactions.
+- Jacoco: Used for code coverage analysis, providing insights into the effectiveness of
+  the app's test suite and identifying areas that require additional testing.
 
 ## SOLID Principles
 
