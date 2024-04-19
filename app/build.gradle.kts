@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("jacoco")
 }
 
 android {
@@ -50,12 +51,40 @@ android {
         }
     }
     testOptions {
+        unitTests.all {
+            it.extensions.configure(JacocoTaskExtension::class) {
+                isIncludeNoLocationClasses = true
+            }
+        }
         packagingOptions {
             jniLibs {
                 useLegacyPackaging = true
             }
         }
     }
+}
+
+tasks.register("jacocoTestReport", JacocoReport::class) {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    classDirectories.from(
+        fileTree(
+            mapOf(
+                "dir" to "${layout.buildDirectory}/tmp/kotlin-classes/debug",
+                "excludes" to listOf("**/*Kt.class")
+            )
+        )
+    )
+
+    sourceDirectories.from("src/main/java")
+    sourceDirectories.from("src/main/kotlin")
+
+    executionData.from(files("${layout.buildDirectory}/jacoco/testDebugUnitTest.exec"))
 }
 
 dependencies {
