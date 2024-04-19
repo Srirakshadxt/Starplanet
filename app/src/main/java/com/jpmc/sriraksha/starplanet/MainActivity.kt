@@ -15,6 +15,7 @@ class MainActivity : ComponentActivity() {
     val planetsViewModel: PlanetsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        planetsViewModel.fetchPlanets()
         setContent {
             StarPlanetTheme {
                 PlanetsListScreen(planetsViewModel)

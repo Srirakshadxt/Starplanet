@@ -35,10 +35,6 @@ class PlanetsViewModel @Inject constructor(
 
     var nextPageUrl: String? = null
 
-    init {
-        fetchPlanets()
-    }
-
     fun fetchPlanets() {
         viewModelScope.launch {
             _uiState.value = PlanetsUiState.Loading

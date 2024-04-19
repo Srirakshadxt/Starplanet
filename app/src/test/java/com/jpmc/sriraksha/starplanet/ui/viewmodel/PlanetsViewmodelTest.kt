@@ -13,11 +13,9 @@ import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -39,9 +37,6 @@ class PlanetsViewModelTest {
 
     private lateinit var planetsViewModel: PlanetsViewModel
 
-    private val testDispatcher = TestCoroutineDispatcher()
-    private val testCoroutineScope = TestCoroutineScope(testDispatcher)
-
     @Before
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
@@ -58,7 +53,7 @@ class PlanetsViewModelTest {
      * Covers the positive case of loading planets and verifying the UI state is updated with the fetched planets.
      */
     @Test
-    fun `fetchPlanets should load planets successfully`() = testCoroutineScope.runBlockingTest {
+    fun `fetchPlanets should load planets successfully`() = runTest {
         val planetResponse = createPlanetResponse(
             listOf(
                 PlanetDTO(
@@ -117,7 +112,7 @@ class PlanetsViewModelTest {
      * Covers the negative case of handling network failure and verifying the UI state is updated with the error message.
      */
     @Test
-    fun `fetchPlanets should handle NoNetworkException`() = testCoroutineScope.runBlockingTest {
+    fun `fetchPlanets should handle NoNetworkException`() = runTest {
         val exception = NoNetworkException("No network connection available")
         `when`(planetRepository.getPlanets()).thenReturn(Result.failure(exception))
 
@@ -130,7 +125,7 @@ class PlanetsViewModelTest {
             "No network connection available",
             (planetsViewModel.uiState.value as PlanetsUiState.Error).errorMessage
         )
-        verify(planetRepository, times(2)).getPlanets()
+        verify(planetRepository, times(1)).getPlanets()
     }
 
     /**
@@ -139,7 +134,7 @@ class PlanetsViewModelTest {
      */
     @Test
     fun `fetchPlanets should handle RemoteDataSourceException`() =
-        testCoroutineScope.runBlockingTest {
+        runTest {
             val exception = RemoteDataSourceException("Unknown error")
             `when`(planetRepository.getPlanets()).thenReturn(Result.failure(exception))
 
@@ -159,7 +154,7 @@ class PlanetsViewModelTest {
      */
     @Test
     fun `loadMorePlanets should load more planets successfully`() =
-        testCoroutineScope.runBlockingTest {
+        runTest {
             val initialPlanetResponse = createPlanetResponse(
                 listOf(
                     PlanetDTO(
@@ -230,7 +225,7 @@ class PlanetsViewModelTest {
      * Covers the negative case of handling network failure during pagination and verifying the UI state is updated with the error message.
      */
     @Test
-    fun `loadMorePlanets should handle NoNetworkException`() = testCoroutineScope.runBlockingTest {
+    fun `loadMorePlanets should handle NoNetworkException`() = runTest {
         val exception = NoNetworkException("No network connection available")
 
         `when`(planetRepository.getNextPage(anyString())).thenReturn(Result.failure(exception))
@@ -252,7 +247,7 @@ class PlanetsViewModelTest {
      */
     @Test
     fun `loadMorePlanets should handle RemoteDataSourceException`() =
-        testCoroutineScope.runBlockingTest {
+        runTest {
             val exception = RemoteDataSourceException("Unknown error")
 
             `when`(planetRepository.getNextPage(anyString())).thenReturn(Result.failure(exception))
@@ -274,7 +269,7 @@ class PlanetsViewModelTest {
      * Covers the positive case of selecting a planet and verifying the selectedPlanet property is updated.
      */
     @Test
-    fun `onPlanetSelected should update the selectedPlanet`() = testCoroutineScope.runBlockingTest {
+    fun `onPlanetSelected should update the selectedPlanet`() = runTest {
         val planet = Planet(
             name = "Earth",
             rotationPeriod = "23.44",
@@ -300,7 +295,7 @@ class PlanetsViewModelTest {
      */
     @Test
     fun `onPlanetDetailsDismissed should set selectedPlanet to null`() =
-        testCoroutineScope.runBlockingTest {
+        runTest {
             // Arrange
             val planet = Planet(
                 name = "Earth",
