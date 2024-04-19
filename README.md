@@ -63,6 +63,16 @@ the `PlanetRepositoryImpl` class provides the actual implementation. This separa
 mocking of the repository in unit tests, ensuring that the tests focus on the behavior of the code
 under test without relying on external dependencies.
 
+Additionally, the use of interfaces in this project was motivated by the need to facilitate unit
+testing. Without using interfaces, it would be challenging to mock or spy on final classes, which
+are commonly used in Android development. By introducing the interface, I could easily create mock
+implementations during unit testing, allowing me to isolate and test individual components without
+relying on external dependencies or making actual network calls. This approach not only improves the
+testability of the codebase but also promotes the Single Responsibility Principle (SRP) by
+separating concerns and ensuring that each class or module has a well-defined responsibility. By
+adhering to these principles and leveraging interfaces, the Star Planet app maintains a high degree
+of modularity, testability, and extensibility, making it easier to maintain and enhance over time.
+
 ## Demonstration
 
 ![starplanet](https://github.com/Srirakshadxt/Starplanet/assets/158619201/6df2e40e-ab6a-4854-a452-90c76e285e41)
