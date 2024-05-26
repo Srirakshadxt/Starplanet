@@ -7,16 +7,16 @@ plugins {
 }
 
 android {
-    namespace = "com.jpmc.sriraksha.starplanet"
+    namespace = "com.sriraksha.starplanet"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.jpmc.sriraksha.starplanet"
+        applicationId = "com.sriraksha.starplanet"
         minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "com.jpmc.sriraksha.starplanet.di.HiltTestRunner"
+        testInstrumentationRunner = "com.sriraksha.starplanet.di.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -51,11 +51,6 @@ android {
         }
     }
     testOptions {
-        unitTests.all {
-            it.extensions.configure(JacocoTaskExtension::class) {
-                isIncludeNoLocationClasses = true
-            }
-        }
         packagingOptions {
             jniLibs {
                 useLegacyPackaging = true

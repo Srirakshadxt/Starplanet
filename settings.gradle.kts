@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Star Planet"
 include(":app")
+ 
